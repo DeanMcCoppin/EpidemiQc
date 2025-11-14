@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/database';
+import { generateHospitalDiseaseData } from '../utils/diseaseDataGenerator';
 
 // Get all hospitals
 export const getHospitals = async (req: Request, res: Response) => {
@@ -43,21 +44,33 @@ export const getHospitals = async (req: Request, res: Response) => {
 
     const result = await pool.query(query, params);
 
-    const hospitals = result.rows.map((row: any) => ({
-      id: row.id,
-      name: row.name,
-      regionId: row.region_id,
-      regionCode: row.region_code,
-      regionName: row.region_name,
-      type: row.hospital_type,
-      city: row.city,
-      latitude: parseFloat(row.latitude),
-      longitude: parseFloat(row.longitude),
-      bedCount: row.bed_count,
-      hasEmergency: row.has_emergency === 1,
-      hasICU: row.has_icu === 1,
-      hasLab: row.has_lab === 1,
-    }));
+    const hospitals = result.rows.map((row: any) => {
+      // Generate disease monitoring data for hospitals with labs
+      const diseaseData = row.has_lab === 1
+        ? generateHospitalDiseaseData(row.id, row.bed_count, lang)
+        : null;
+
+      return {
+        id: row.id,
+        name: row.name,
+        regionId: row.region_id,
+        regionCode: row.region_code,
+        regionName: row.region_name,
+        type: row.hospital_type,
+        city: row.city,
+        latitude: parseFloat(row.latitude),
+        longitude: parseFloat(row.longitude),
+        bedCount: row.bed_count,
+        hasEmergency: row.has_emergency === 1,
+        hasICU: row.has_icu === 1,
+        hasLab: row.has_lab === 1,
+        ...(diseaseData && {
+          diseaseMonitoring: diseaseData.diseaseMonitoring,
+          overallSeverity: diseaseData.overallSeverity,
+          maxDetectionRate: diseaseData.maxDetectionRate,
+        }),
+      };
+    });
 
     res.json({
       success: true,
@@ -112,6 +125,12 @@ export const getHospitalById = async (req: Request, res: Response) => {
     }
 
     const row = result.rows[0];
+
+    // Generate disease monitoring data for hospitals with labs
+    const diseaseData = row.has_lab === 1
+      ? generateHospitalDiseaseData(row.id, row.bed_count, lang)
+      : null;
+
     const hospital = {
       id: row.id,
       name: row.name,
@@ -129,6 +148,11 @@ export const getHospitalById = async (req: Request, res: Response) => {
       hasEmergency: row.has_emergency === 1,
       hasICU: row.has_icu === 1,
       hasLab: row.has_lab === 1,
+      ...(diseaseData && {
+        diseaseMonitoring: diseaseData.diseaseMonitoring,
+        overallSeverity: diseaseData.overallSeverity,
+        maxDetectionRate: diseaseData.maxDetectionRate,
+      }),
     };
 
     res.json({

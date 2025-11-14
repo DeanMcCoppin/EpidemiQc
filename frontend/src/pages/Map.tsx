@@ -134,11 +134,23 @@ const Map = () => {
     };
   };
 
-  const getHospitalIcon = () => {
+  const getHospitalIcon = (hospital: Hospital) => {
+    // Determine color based on severity of disease detection
+    const severityColors = {
+      critical: '#DC2626',  // Red
+      high: '#F97316',      // Orange
+      elevated: '#F59E0B',  // Amber
+      normal: '#2563EB',    // Blue
+    };
+
+    const fillColor = hospital.overallSeverity
+      ? severityColors[hospital.overallSeverity]
+      : '#2563EB';
+
     // Hospital cross icon - using simpler H symbol
     return {
       path: 'M 0,-8 L 0,-2 L -6,-2 L -6,2 L 0,2 L 0,8 L 4,8 L 4,2 L 10,2 L 10,-2 L 4,-2 L 4,-8 Z',
-      fillColor: '#2563EB',
+      fillColor,
       fillOpacity: 0.95,
       strokeColor: '#ffffff',
       strokeWeight: 2,
@@ -179,26 +191,59 @@ const Map = () => {
     <LoadScript googleMapsApiKey={apiKey}>
       <div className="relative">
         {/* Legend */}
-        <div className="absolute top-4 right-4 z-10 bg-white p-4 rounded-lg shadow-lg">
-          <h3 className="font-bold text-lg mb-2">{t('map.legend')}</h3>
-          <div className="space-y-2 mb-3">
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-              <span className="text-sm">{t('map.normal')} (&lt;5%)</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-orange-500 mr-2"></div>
-              <span className="text-sm">{t('map.warning')} (5-10%)</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-orange-600 mr-2"></div>
-              <span className="text-sm">{t('map.alert')} (10-20%)</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-red-700 mr-2"></div>
-              <span className="text-sm">{t('map.critical')} (&gt;20%)</span>
+        <div className="absolute top-4 right-4 z-10 bg-white p-4 rounded-lg shadow-lg max-w-xs">
+          <h3 className="font-bold text-lg mb-3">{t('map.legend')}</h3>
+
+          {/* Region Severity Legend */}
+          <div className="mb-3">
+            <p className="text-xs font-semibold text-gray-600 mb-2">
+              {i18n.language === 'fr' ? 'Régions (éclosions)' : 'Regions (outbreaks)'}
+            </p>
+            <div className="space-y-1.5">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                <span className="text-xs">{t('map.normal')} (&lt;5%)</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
+                <span className="text-xs">{t('map.warning')} (5-10%)</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-orange-600 mr-2"></div>
+                <span className="text-xs">{t('map.alert')} (10-20%)</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-red-700 mr-2"></div>
+                <span className="text-xs">{t('map.critical')} (&gt;20%)</span>
+              </div>
             </div>
           </div>
+
+          {/* Hospital Severity Legend */}
+          <div className="mb-3 border-t pt-3">
+            <p className="text-xs font-semibold text-gray-600 mb-2">
+              {i18n.language === 'fr' ? 'Hôpitaux (détection)' : 'Hospitals (detection)'}
+            </p>
+            <div className="space-y-1.5">
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-blue-600 mr-2"></div>
+                <span className="text-xs">{i18n.language === 'fr' ? 'Normal' : 'Normal'}</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-amber-500 mr-2"></div>
+                <span className="text-xs">{i18n.language === 'fr' ? 'Élevé' : 'Elevated'}</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-orange-600 mr-2"></div>
+                <span className="text-xs">{i18n.language === 'fr' ? 'Haut' : 'High'}</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-red-600 mr-2"></div>
+                <span className="text-xs">{i18n.language === 'fr' ? 'Critique' : 'Critical'}</span>
+              </div>
+            </div>
+          </div>
+
           <div className="border-t pt-3">
             <button
               onClick={() => setShowHospitals(!showHospitals)}
@@ -232,7 +277,7 @@ const Map = () => {
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
-            zoom={4.8}
+            zoom={5.5}
             onLoad={onMapLoad}
             options={{
               disableDefaultUI: false,
@@ -242,7 +287,7 @@ const Map = () => {
               fullscreenControl: true,
               mapTypeId: 'roadmap',
               minZoom: 4,
-              maxZoom: 12,
+              maxZoom: 15,
             }}
           >
             {regions.map((region) => (
@@ -267,7 +312,7 @@ const Map = () => {
                   lat: hospital.latitude,
                   lng: hospital.longitude,
                 }}
-                icon={getHospitalIcon()}
+                icon={getHospitalIcon(hospital)}
                 onClick={() => {
                   setSelectedHospital(hospital);
                   setSelectedRegion(null);
@@ -317,9 +362,11 @@ const Map = () => {
                 }}
                 onCloseClick={() => setSelectedHospital(null)}
               >
-                <div className="p-2 max-w-xs">
+                <div className="p-3 max-w-md">
                   <h3 className="font-bold text-lg mb-2 text-blue-700">{selectedHospital.name}</h3>
-                  <div className="space-y-1 text-sm">
+
+                  {/* Basic Info */}
+                  <div className="space-y-1 text-sm mb-3">
                     <p><span className="font-semibold">{i18n.language === 'fr' ? 'Ville:' : 'City:'}</span> {selectedHospital.city}</p>
                     <p><span className="font-semibold">{i18n.language === 'fr' ? 'Région:' : 'Region:'}</span> {selectedHospital.regionName}</p>
                     <p><span className="font-semibold">{i18n.language === 'fr' ? 'Type:' : 'Type:'}</span> {selectedHospital.type}</p>
@@ -342,6 +389,96 @@ const Map = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* Disease Monitoring Data */}
+                  {selectedHospital.diseaseMonitoring && selectedHospital.diseaseMonitoring.length > 0 && (
+                    <div className="border-t pt-3 mt-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-bold text-sm">
+                          {i18n.language === 'fr' ? 'Surveillance des maladies infectieuses' : 'Infectious Disease Monitoring'}
+                        </h4>
+                        {selectedHospital.overallSeverity && (
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                            selectedHospital.overallSeverity === 'critical' ? 'bg-red-100 text-red-800' :
+                            selectedHospital.overallSeverity === 'high' ? 'bg-orange-100 text-orange-800' :
+                            selectedHospital.overallSeverity === 'elevated' ? 'bg-amber-100 text-amber-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {selectedHospital.overallSeverity === 'critical' ? (i18n.language === 'fr' ? 'Critique' : 'Critical') :
+                             selectedHospital.overallSeverity === 'high' ? (i18n.language === 'fr' ? 'Haut' : 'High') :
+                             selectedHospital.overallSeverity === 'elevated' ? (i18n.language === 'fr' ? 'Élevé' : 'Elevated') :
+                             (i18n.language === 'fr' ? 'Normal' : 'Normal')}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                        {selectedHospital.diseaseMonitoring.map((disease, idx) => (
+                          <div key={idx} className="bg-gray-50 p-2 rounded text-xs">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-semibold text-gray-800">{disease.diseaseName}</span>
+                              <span className={`px-1.5 py-0.5 rounded font-semibold ${
+                                disease.severity === 'critical' ? 'bg-red-200 text-red-900' :
+                                disease.severity === 'high' ? 'bg-orange-200 text-orange-900' :
+                                disease.severity === 'elevated' ? 'bg-amber-200 text-amber-900' :
+                                'bg-green-200 text-green-900'
+                              }`}>
+                                {disease.currentRate.toFixed(1)}%
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
+                              <div>
+                                <div className="text-gray-500">{i18n.language === 'fr' ? 'Moy 24h' : 'Avg 24h'}</div>
+                                <div className="font-medium">{disease.averageRate24h.toFixed(1)}%</div>
+                              </div>
+                              <div>
+                                <div className="text-gray-500">{i18n.language === 'fr' ? 'Max 24h' : 'Peak 24h'}</div>
+                                <div className="font-medium">{disease.peakRate24h.toFixed(1)}%</div>
+                              </div>
+                              <div>
+                                <div className="text-gray-500">{i18n.language === 'fr' ? 'Tendance' : 'Trend'}</div>
+                                <div className="font-medium">
+                                  {disease.trend === 'increasing' ? '📈' : disease.trend === 'decreasing' ? '📉' : '➡️'}
+                                  {disease.trend === 'increasing' ? (i18n.language === 'fr' ? ' Hausse' : ' Up') :
+                                   disease.trend === 'decreasing' ? (i18n.language === 'fr' ? ' Baisse' : ' Down') :
+                                   (i18n.language === 'fr' ? ' Stable' : ' Stable')}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Mini sparkline visualization */}
+                            <div className="mt-2 flex items-end h-8 gap-0.5">
+                              {disease.data24h.slice(-12).map((point, i) => {
+                                const maxRate = Math.max(...disease.data24h.map(d => d.detectionRate));
+                                const height = maxRate > 0 ? (point.detectionRate / maxRate) * 100 : 0;
+                                return (
+                                  <div
+                                    key={i}
+                                    className={`flex-1 rounded-t ${
+                                      point.detectionRate > 15 ? 'bg-red-400' :
+                                      point.detectionRate > 10 ? 'bg-orange-400' :
+                                      point.detectionRate > 5 ? 'bg-amber-400' :
+                                      'bg-blue-400'
+                                    }`}
+                                    style={{ height: `${Math.max(height, 5)}%` }}
+                                    title={`${point.hour}:00 - ${point.detectionRate.toFixed(1)}%`}
+                                  />
+                                );
+                              })}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-1 text-center">
+                              {i18n.language === 'fr' ? 'Dernières 12 heures' : 'Last 12 hours'}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-2 text-xs text-gray-500 italic">
+                        {i18n.language === 'fr' ? '⚡ Données simulées en temps réel' : '⚡ Live simulated data'}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </InfoWindow>
             )}

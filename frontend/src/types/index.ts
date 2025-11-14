@@ -67,6 +67,26 @@ export interface MapRegion extends Region {
   colorCode: string;
 }
 
+// Disease detection types
+export interface DiseaseDataPoint {
+  hour: number; // 0-23
+  timestamp: string;
+  totalTests: number;
+  positiveTests: number;
+  detectionRate: number; // percentage
+}
+
+export interface DiseaseMonitoring {
+  diseaseCode: string;
+  diseaseName: string;
+  currentRate: number; // current detection rate %
+  averageRate24h: number; // 24-hour average %
+  peakRate24h: number; // highest rate in last 24h
+  trend: 'increasing' | 'stable' | 'decreasing';
+  severity: 'normal' | 'elevated' | 'high' | 'critical';
+  data24h: DiseaseDataPoint[]; // 24 hourly data points
+}
+
 // Hospital types
 export interface Hospital {
   id: number;
@@ -85,6 +105,9 @@ export interface Hospital {
   hasEmergency: boolean;
   hasICU: boolean;
   hasLab: boolean;
+  diseaseMonitoring?: DiseaseMonitoring[]; // infectious disease data
+  overallSeverity?: 'normal' | 'elevated' | 'high' | 'critical';
+  maxDetectionRate?: number; // highest detection rate across all diseases
 }
 
 // Preference types
