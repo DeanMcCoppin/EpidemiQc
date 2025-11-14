@@ -1,0 +1,106 @@
+{
+  "app": {
+    "title": "EpidemiQc",
+    "subtitle": "Surveillance des épidémies au Québec"
+  },
+  "nav": {
+    "home": "Accueil",
+    "map": "Carte",
+    "dashboard": "Tableau de bord",
+    "preferences": "Préférences",
+    "admin": "Administration",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion"
+  },
+  "auth": {
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "loginButton": "Se connecter",
+    "registerButton": "Créer un compte",
+    "loginTitle": "Connexion",
+    "registerTitle": "Créer un compte",
+    "loginSuccess": "Connexion réussie",
+    "registerSuccess": "Compte créé avec succès. Vous pouvez maintenant vous connecter.",
+    "loginError": "Erreur de connexion. Vérifiez vos informations.",
+    "registerError": "Erreur lors de la création du compte.",
+    "noAccount": "Pas de compte?",
+    "hasAccount": "Vous avez déjà un compte?",
+    "clickHere": "Cliquez ici"
+  },
+  "map": {
+    "title": "Carte des éclosions",
+    "legend": "Légende",
+    "normal": "Normal",
+    "warning": "Avertissement",
+    "alert": "Alerte",
+    "critical": "Critique",
+    "loading": "Chargement de la carte...",
+    "noData": "Aucune donnée disponible"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "currentOutbreaks": "Éclosions actuelles",
+    "myPreferences": "Mes préférences",
+    "noOutbreaks": "Aucune éclosion active",
+    "positiveRate": "Taux de positivité",
+    "tests": "tests",
+    "affectedPopulation": "Population affectée",
+    "trend": "Tendance",
+    "lastUpdated": "Dernière mise à jour"
+  },
+  "preferences": {
+    "title": "Préférences de notification",
+    "addNew": "Ajouter une préférence",
+    "selectCondition": "Sélectionner une condition",
+    "selectRegion": "Sélectionner une région",
+    "emailNotifications": "Notifications par courriel",
+    "pushNotifications": "Notifications push",
+    "minSeverity": "Sévérité minimale",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette préférence?",
+    "noPreferences": "Aucune préférence configurée"
+  },
+  "admin": {
+    "title": "Administration",
+    "analytics": "Analytique",
+    "dataManagement": "Gestion des données",
+    "thresholds": "Seuils d'alerte",
+    "totalUsers": "Utilisateurs totaux",
+    "activeUsers": "Utilisateurs actifs",
+    "totalOutbreaks": "Éclosions totales",
+    "criticalOutbreaks": "Éclosions critiques",
+    "notificationsSent": "Notifications envoyées",
+    "addTestResult": "Ajouter un résultat",
+    "region": "Région",
+    "condition": "Condition",
+    "date": "Date",
+    "totalTests": "Total de tests",
+    "positiveTests": "Tests positifs",
+    "positiveRate": "Taux de positivité",
+    "actions": "Actions",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "severity": {
+    "normal": "Normal",
+    "warning": "Avertissement",
+    "alert": "Alerte",
+    "critical": "Critique"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "all": "Tous"
+  }
+}
