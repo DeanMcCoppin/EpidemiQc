@@ -112,25 +112,32 @@ const thresholds = [
   { type: 'critical', value: 20.0, color: '#DC143C' },
 ];
 
-function generateMockTestResults(regionId: number, conditionId: number, days: number) {
-  const results = [];
-  const baseRate = Math.random() * 3 + 1;
+function generateMockTestResults(regionId: number, conditionId: number) {
+  const results: any[] = [];
+  const testDate = new Date().toISOString().split('T')[0];
 
-  for (let i = 0; i < days; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    const testDate = date.toISOString().split('T')[0];
+  // Create 5 different data points per condition to simulate refresh cycling
+  // Mix of normal, warning, alert, and critical values
+  const dataPoints = [
+    { rate: Math.random() * 4 + 1, index: 0 },      // Normal: 1-5%
+    { rate: Math.random() * 5 + 5, index: 1 },      // Warning: 5-10%
+    { rate: Math.random() * 10 + 10, index: 2 },    // Alert: 10-20%
+    { rate: Math.random() * 15 + 20, index: 3 },    // Critical: 20-35%
+    { rate: Math.random() * 3 + 2, index: 4 },      // Normal: 2-5%
+  ];
 
+  // Randomize which conditions get which severity patterns
+  const shouldHaveHighValues = Math.random() > 0.5;
+
+  if (!shouldHaveHighValues) {
+    // Make most values normal range
+    dataPoints[2].rate = Math.random() * 4 + 3;   // Make "alert" normal
+    dataPoints[3].rate = Math.random() * 5 + 4;   // Make "critical" warning
+  }
+
+  dataPoints.forEach((dataPoint) => {
     const totalTests = Math.floor(Math.random() * 800) + 200;
-
-    let positiveRate = baseRate;
-    if (i >= 5 && i <= 15 && Math.random() > 0.5) {
-      positiveRate = baseRate + Math.random() * 15;
-    } else if (i >= 20 && i <= 30 && Math.random() > 0.7) {
-      positiveRate = baseRate + Math.random() * 8;
-    }
-
-    const positiveTests = Math.floor(totalTests * (positiveRate / 100));
+    const positiveTests = Math.floor(totalTests * (dataPoint.rate / 100));
     const actualRate = ((positiveTests / totalTests) * 100).toFixed(2);
 
     results.push({
@@ -141,8 +148,9 @@ function generateMockTestResults(regionId: number, conditionId: number, days: nu
       positiveTests,
       positiveRate: actualRate,
       populationTested: Math.floor(totalTests * 0.8),
+      dataIndex: dataPoint.index,
     });
-  }
+  });
 
   return results;
 }
@@ -228,14 +236,14 @@ async function seed() {
     // Insert test results
     console.log('🧪 Generating mock test results...');
     const insertResult = db.prepare(
-      'INSERT INTO test_results (region_id, condition_id, test_date, total_tests, positive_tests, positive_rate, population_tested) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO test_results (region_id, condition_id, test_date, total_tests, positive_tests, positive_rate, population_tested, data_index) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     );
     let resultsCount = 0;
     for (let regionId = 1; regionId <= regions.length; regionId++) {
       for (let conditionId = 1; conditionId <= conditions.length; conditionId++) {
-        const results = generateMockTestResults(regionId, conditionId, 90);
+        const results = generateMockTestResults(regionId, conditionId);
         for (const result of results) {
-          insertResult.run(result.regionId, result.conditionId, result.testDate, result.totalTests, result.positiveTests, result.positiveRate, result.populationTested);
+          insertResult.run(result.regionId, result.conditionId, result.testDate, result.totalTests, result.positiveTests, result.positiveRate, result.populationTested, result.dataIndex);
           resultsCount++;
         }
       }

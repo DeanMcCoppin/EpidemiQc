@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '../store/authStore';
+import Beams from '../components/Beams';
 
 const Register = () => {
   const { t, i18n } = useTranslation();
@@ -34,8 +35,21 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-quebec-gray">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-black relative">
+      {/* Beams Background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        <Beams
+          beamWidth={2.5}
+          beamHeight={30}
+          beamNumber={48}
+          lightColor="#60a5fa"
+          speed={2}
+          noiseIntensity={1.5}
+          scale={0.2}
+          rotation={0}
+        />
+      </div>
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg relative" style={{ zIndex: 10 }}>
         <div>
           <h2 className="text-center text-3xl font-bold text-gray-900">
             {t('auth.registerTitle')}

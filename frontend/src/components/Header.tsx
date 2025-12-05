@@ -42,6 +42,9 @@ const Header = () => {
             <Link to="/map" className="hover:text-quebec-blue-light transition">
               {t('nav.map')}
             </Link>
+            <Link to="/hospitals" className="hover:text-quebec-blue-light transition">
+              {i18n.language === 'fr' ? 'Hôpitaux' : 'Hospitals'}
+            </Link>
             {isAuthenticated && (
               <>
                 <Link to="/dashboard" className="hover:text-quebec-blue-light transition">

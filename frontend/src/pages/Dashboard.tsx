@@ -45,57 +45,63 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">{t('dashboard.title')}</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-8">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+            <AlertTriangle className="w-10 h-10 text-blue-400" />
+            {t('dashboard.title')}
+          </h1>
+          <p className="text-slate-400">{i18n.language === 'fr' ? 'Vue d\'ensemble des éclosions actives' : 'Overview of active outbreaks'}</p>
+        </div>
 
         {/* Summary Cards */}
         {summary && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <AlertTriangle className="h-8 w-8 text-blue-500" />
+            <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/10 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/30 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-blue-200 text-sm font-medium mb-1">{t('dashboard.currentOutbreaks')}</p>
+                  <p className="text-4xl font-bold text-white">{summary.total}</p>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{t('dashboard.currentOutbreaks')}</p>
-                  <p className="text-2xl font-bold text-gray-900">{summary.total}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="h-8 w-8 bg-red-500 rounded-full"></div>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{t('severity.critical')}</p>
-                  <p className="text-2xl font-bold text-gray-900">{summary.bySeverity.critical}</p>
+                <div className="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                  <AlertTriangle className="h-8 w-8 text-blue-400" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="h-8 w-8 bg-orange-500 rounded-full"></div>
+            <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 backdrop-blur-sm rounded-2xl p-6 border border-red-500/30 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-red-200 text-sm font-medium mb-1">{t('severity.critical')}</p>
+                  <p className="text-4xl font-bold text-white">{summary.bySeverity.critical}</p>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{t('severity.alert')}</p>
-                  <p className="text-2xl font-bold text-gray-900">{summary.bySeverity.alert}</p>
+                <div className="w-14 h-14 rounded-xl bg-red-500/30 flex items-center justify-center">
+                  <div className="h-8 w-8 bg-red-500 rounded-full shadow-lg shadow-red-500/50"></div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="h-8 w-8 bg-yellow-500 rounded-full"></div>
+            <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/10 backdrop-blur-sm rounded-2xl p-6 border border-orange-500/30 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-orange-200 text-sm font-medium mb-1">{t('severity.alert')}</p>
+                  <p className="text-4xl font-bold text-white">{summary.bySeverity.alert}</p>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{t('severity.warning')}</p>
-                  <p className="text-2xl font-bold text-gray-900">{summary.bySeverity.warning}</p>
+                <div className="w-14 h-14 rounded-xl bg-orange-500/30 flex items-center justify-center">
+                  <div className="h-8 w-8 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50"></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 backdrop-blur-sm rounded-2xl p-6 border border-yellow-500/30 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-yellow-200 text-sm font-medium mb-1">{t('severity.warning')}</p>
+                  <p className="text-4xl font-bold text-white">{summary.bySeverity.warning}</p>
+                </div>
+                <div className="w-14 h-14 rounded-xl bg-yellow-500/30 flex items-center justify-center">
+                  <div className="h-8 w-8 bg-yellow-500 rounded-full shadow-lg shadow-yellow-500/50"></div>
                 </div>
               </div>
             </div>
@@ -103,15 +109,15 @@ const Dashboard = () => {
         )}
 
         {/* Filters */}
-        <div className="mb-6 flex space-x-2">
+        <div className="mb-8 flex flex-wrap gap-3">
           {['all', 'critical', 'alert', 'warning'].map((severity) => (
             <button
               key={severity}
               onClick={() => setFilter(severity)}
-              className={`px-4 py-2 rounded-lg font-medium transition ${
+              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
                 filter === severity
-                  ? 'bg-quebec-blue text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30'
+                  : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 border border-slate-700'
               }`}
             >
               {severity === 'all' ? t('common.all') : t(`severity.${severity}`)}
@@ -122,63 +128,85 @@ const Dashboard = () => {
         {/* Outbreaks List */}
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <div className="spinner"></div>
+            <div className="text-center">
+              <div className="spinner mb-4"></div>
+              <p className="text-slate-400">Loading outbreaks...</p>
+            </div>
           </div>
         ) : outbreaks.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-gray-600">{t('dashboard.noOutbreaks')}</p>
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl p-12 text-center">
+            <p className="text-slate-400 text-lg">{t('dashboard.noOutbreaks')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {outbreaks.map((outbreak, idx) => (
               <div
                 key={idx}
-                className={`bg-white rounded-lg shadow-md p-6 border-l-4 ${outbreak.severity === 'critical'
-                  ? 'border-red-500'
-                  : outbreak.severity === 'alert'
-                  ? 'border-orange-500'
-                  : outbreak.severity === 'warning'
-                  ? 'border-yellow-500'
-                  : 'border-green-500'
+                className={`bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-l-4 transition-all duration-200 hover:scale-105 hover:shadow-2xl ${
+                  outbreak.severity === 'critical'
+                    ? 'border-red-500'
+                    : outbreak.severity === 'alert'
+                    ? 'border-orange-500'
+                    : outbreak.severity === 'warning'
+                    ? 'border-yellow-500'
+                    : 'border-green-500'
+                } ${
+                  outbreak.severity === 'critical'
+                    ? 'hover:border-red-400 bg-red-500/5'
+                    : outbreak.severity === 'alert'
+                    ? 'hover:border-orange-400 bg-orange-500/5'
+                    : outbreak.severity === 'warning'
+                    ? 'hover:border-yellow-400 bg-yellow-500/5'
+                    : 'hover:border-green-400 bg-green-500/5'
                 }`}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800">{outbreak.region.name}</h3>
-                    <p className="text-sm text-gray-600">{outbreak.condition.name}</p>
+                    <h3 className="text-xl font-bold text-white mb-1">{outbreak.region.name}</h3>
+                    <p className="text-sm text-slate-400">{outbreak.condition.name}</p>
                   </div>
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityColor(
-                      outbreak.severity
-                    )}`}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold ${
+                      outbreak.severity === 'critical'
+                        ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                        : outbreak.severity === 'alert'
+                        ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
+                        : outbreak.severity === 'warning'
+                        ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                        : 'bg-green-500/20 text-green-300 border border-green-500/30'
+                    }`}
                   >
                     {t(`severity.${outbreak.severity}`)}
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">{t('dashboard.positiveRate')}:</span>
-                    <span className="text-sm font-bold text-red-600">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+                    <span className="text-sm text-slate-400">{t('dashboard.positiveRate')}:</span>
+                    <span className="text-lg font-bold text-red-400">
                       {outbreak.positiveRate.toFixed(1)}%
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">{t('dashboard.tests')}:</span>
-                    <span className="text-sm font-semibold">{outbreak.totalTests}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400">{t('dashboard.tests')}:</span>
+                    <span className="text-sm font-semibold text-white">{outbreak.totalTests}</span>
                   </div>
                   {outbreak.affectedPopulation && (
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">{t('dashboard.affectedPopulation')}:</span>
-                      <span className="text-sm font-semibold">{outbreak.affectedPopulation}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-400">{t('dashboard.affectedPopulation')}:</span>
+                      <span className="text-sm font-semibold text-white">{outbreak.affectedPopulation}</span>
                     </div>
                   )}
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">{t('dashboard.trend')}:</span>
-                    <span className="text-sm font-semibold capitalize">{outbreak.trend}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400 flex items-center gap-1">
+                      <TrendingUp className="w-4 h-4" />
+                      {t('dashboard.trend')}:
+                    </span>
+                    <span className="text-sm font-semibold text-white capitalize">{outbreak.trend}</span>
                   </div>
-                  <div className="pt-2 border-t">
-                    <span className="text-xs text-gray-500">
+                  <div className="pt-3 border-t border-slate-700/50">
+                    <span className="text-xs text-slate-500 flex items-center gap-1">
+                      <Users className="w-3 h-3" />
                       {t('dashboard.lastUpdated')}: {new Date(outbreak.lastUpdated).toLocaleDateString()}
                     </span>
                   </div>

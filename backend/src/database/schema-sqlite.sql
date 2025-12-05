@@ -90,11 +90,11 @@ CREATE TABLE test_results (
     positive_tests INTEGER NOT NULL,
     positive_rate REAL,
     population_tested INTEGER,
+    data_index INTEGER DEFAULT 0,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (region_id) REFERENCES regions(id) ON DELETE CASCADE,
-    FOREIGN KEY (condition_id) REFERENCES conditions(id) ON DELETE CASCADE,
-    UNIQUE(region_id, condition_id, test_date)
+    FOREIGN KEY (condition_id) REFERENCES conditions(id) ON DELETE CASCADE
 );
 
 -- Outbreak thresholds

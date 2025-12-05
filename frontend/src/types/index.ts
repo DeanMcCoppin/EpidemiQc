@@ -87,6 +87,21 @@ export interface Hospital {
   hasLab: boolean;
 }
 
+export interface HospitalTestResult {
+  conditionId: number;
+  conditionCode: string;
+  conditionName: string;
+  category: string;
+  positiveRate: number;
+  normalRate: number;
+  deviation: number;
+  totalTests: number;
+  positiveTests: number;
+  populationTested: number;
+  severity: 'normal' | 'warning' | 'alert' | 'critical';
+  lastUpdated: string;
+}
+
 // Preference types
 export interface UserPreference {
   id: number;

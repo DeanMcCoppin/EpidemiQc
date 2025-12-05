@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
-import Header from './components/Header';
+import BurgerMenu from './components/BurgerMenu';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -8,6 +8,7 @@ import Map from './pages/Map';
 import Dashboard from './pages/Dashboard';
 import Preferences from './pages/Preferences';
 import AdminDashboard from './pages/AdminDashboard';
+import HospitalTable from './pages/HospitalTable';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -24,12 +25,13 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 function App() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <BurgerMenu />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/map" element={<Map />} />
+        <Route path="/hospitals" element={<HospitalTable />} />
         <Route
           path="/dashboard"
           element={

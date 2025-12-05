@@ -48,3 +48,49 @@ code {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Animated Beams */
+@keyframes beam-1 {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateY(-100%);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes beam-2 {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateY(-50%);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(50%);
+  }
+}
+
+@keyframes beam-3 {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(0%);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-100%);
+  }
+}
+
+.animate-beam-1 {
+  animation: beam-1 8s ease-in-out infinite;
+}
+
+.animate-beam-2 {
+  animation: beam-2 10s ease-in-out infinite;
+}
+
+.animate-beam-3 {
+  animation: beam-3 12s ease-in-out infinite;
+}
