@@ -48,7 +48,19 @@ const hospitals = [
 
 async function setupDatabase() {
   try {
-    console.log('🔧 Setting up database...');
+    console.log('🔧 Checking database...');
+
+    // Check if database is already set up
+    const checkResult = await pool.query(
+      "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'hospitals')"
+    );
+
+    if (checkResult.rows[0].exists) {
+      console.log('✅ Database already set up, skipping...');
+      return;
+    }
+
+    console.log('🔧 Setting up database for the first time...');
 
     // Read and execute schema SQL
     const schemaPath = path.join(__dirname, 'schema.sql');
@@ -120,11 +132,11 @@ async function setupDatabase() {
     console.log('✅ Admin user created (admin@epidemiqc.ca / admin123)');
 
     console.log('🎉 Database setup complete!');
-    process.exit(0);
   } catch (error) {
     console.error('❌ Database setup failed:', error);
-    process.exit(1);
+    throw error;
   }
 }
 
-setupDatabase();
+// Export for server to use
+export default setupDatabase;

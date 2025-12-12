@@ -3,15 +3,19 @@ dotenv.config();
 
 import app from './app';
 import { pool } from './config/database';
+import setupDatabase from './database/setup';
 
 const PORT = process.env.PORT || 5000;
 
-// Test database connection
+// Test database connection and setup
 const startServer = async () => {
   try {
     // Test database connection
     await pool.query('SELECT 1');
     console.log('✅ Database connected successfully');
+
+    // Run database setup (will skip if already set up)
+    await setupDatabase();
 
     // Start server
     app.listen(PORT, () => {
