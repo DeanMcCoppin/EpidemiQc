@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS user_preferences CASCADE;
 DROP TABLE IF EXISTS thresholds CASCADE;
 DROP TABLE IF EXISTS test_results CASCADE;
 DROP TABLE IF EXISTS audit_logs CASCADE;
+DROP TABLE IF EXISTS outbreaks CASCADE;
+DROP TABLE IF EXISTS hospitals CASCADE;
 DROP TABLE IF EXISTS conditions CASCADE;
 DROP TABLE IF EXISTS regions CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
@@ -56,19 +58,52 @@ CREATE TABLE conditions (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Test results (mock lab data)
-CREATE TABLE test_results (
+-- Hospitals table
+CREATE TABLE hospitals (
+    id SERIAL PRIMARY KEY,
+    name_fr VARCHAR(255) NOT NULL,
+    name_en VARCHAR(255) NOT NULL,
+    region_id INTEGER REFERENCES regions(id) ON DELETE CASCADE,
+    hospital_type VARCHAR(100),
+    city VARCHAR(255),
+    address VARCHAR(500),
+    postal_code VARCHAR(20),
+    phone VARCHAR(50),
+    latitude DECIMAL(10, 8),
+    longitude DECIMAL(11, 8),
+    bed_count INTEGER,
+    has_emergency BOOLEAN DEFAULT false,
+    has_icu BOOLEAN DEFAULT false,
+    has_lab BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Outbreaks table
+CREATE TABLE outbreaks (
     id SERIAL PRIMARY KEY,
     region_id INTEGER REFERENCES regions(id) ON DELETE CASCADE,
     condition_id INTEGER REFERENCES conditions(id) ON DELETE CASCADE,
+    severity VARCHAR(50),
+    start_date DATE,
+    end_date DATE,
+    status VARCHAR(50),
+    description_fr TEXT,
+    description_en TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Test results (mock lab data)
+CREATE TABLE test_results (
+    id SERIAL PRIMARY KEY,
+    hospital_id INTEGER REFERENCES hospitals(id) ON DELETE CASCADE,
+    condition_id INTEGER REFERENCES conditions(id) ON DELETE CASCADE,
     test_date DATE NOT NULL,
+    positive_count INTEGER DEFAULT 0,
+    negative_count INTEGER DEFAULT 0,
     total_tests INTEGER NOT NULL,
-    positive_tests INTEGER NOT NULL,
-    positive_rate DECIMAL(5, 2),
-    population_tested INTEGER,
+    positivity_rate DECIMAL(5, 2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(region_id, condition_id, test_date)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Outbreak thresholds
@@ -127,8 +162,11 @@ CREATE TABLE audit_logs (
 
 -- Create indexes for performance
 CREATE INDEX idx_test_results_date ON test_results(test_date DESC);
-CREATE INDEX idx_test_results_region ON test_results(region_id);
+CREATE INDEX idx_test_results_hospital ON test_results(hospital_id);
 CREATE INDEX idx_test_results_condition ON test_results(condition_id);
+CREATE INDEX idx_hospitals_region ON hospitals(region_id);
+CREATE INDEX idx_outbreaks_region ON outbreaks(region_id);
+CREATE INDEX idx_outbreaks_condition ON outbreaks(condition_id);
 CREATE INDEX idx_notifications_user ON notifications(user_id, sent_at DESC);
 CREATE INDEX idx_user_preferences_user ON user_preferences(user_id);
 CREATE INDEX idx_regions_code ON regions(code);
