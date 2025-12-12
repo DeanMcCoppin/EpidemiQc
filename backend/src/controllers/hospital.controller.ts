@@ -27,20 +27,21 @@ export const getHospitals = async (req: Request, res: Response) => {
         h.has_lab
       FROM hospitals h
       INNER JOIN regions r ON h.region_id = r.id
-      WHERE h.is_active = 1
+      WHERE 1=1
     `;
 
     const params: any[] = [];
+    let paramIndex = 1;
 
     if (regionId) {
       params.push(regionId);
-      query += ` AND h.region_id = ?`;
+      query += ` AND h.region_id = $${paramIndex++}`;
     }
 
     if (hasLab !== undefined) {
-      const hasLabValue = hasLab === 'true' || hasLab === '1' || hasLab === true ? 1 : 0;
+      const hasLabValue = hasLab === 'true' || hasLab === '1' || hasLab === true;
       params.push(hasLabValue);
-      query += ` AND h.has_lab = ?`;
+      query += ` AND h.has_lab = $${paramIndex++}`;
       console.log('🏥 Filtering by hasLab:', hasLabValue);
     }
 
@@ -67,9 +68,9 @@ export const getHospitals = async (req: Request, res: Response) => {
       latitude: parseFloat(row.latitude),
       longitude: parseFloat(row.longitude),
       bedCount: row.bed_count,
-      hasEmergency: row.has_emergency === 1,
-      hasICU: row.has_icu === 1,
-      hasLab: row.has_lab === 1,
+      hasEmergency: row.has_emergency,
+      hasICU: row.has_icu,
+      hasLab: row.has_lab,
     }));
 
     console.log('🏥 ✅ Returning', hospitals.length, 'hospitals');
