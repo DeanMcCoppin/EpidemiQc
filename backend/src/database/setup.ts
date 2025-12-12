@@ -34,33 +34,100 @@ const conditions = [
 ];
 
 const hospitals = [
+  // Region 01 - Bas-Saint-Laurent
   { nameFr: 'Hôpital régional de Rimouski', nameEn: 'Rimouski Regional Hospital', regionCode: '01', type: 'Regional', city: 'Rimouski', lat: 48.4489, lng: -68.5251, beds: 294, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital Notre-Dame-de-Fatima', nameEn: 'Notre-Dame-de-Fatima Hospital', regionCode: '01', type: 'Community', city: 'La Pocatière', lat: 47.3664, lng: -70.0349, beds: 42, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 02 - Saguenay–Lac-Saint-Jean
   { nameFr: 'Hôpital de Chicoutimi', nameEn: 'Chicoutimi Hospital', regionCode: '02', type: 'Regional', city: 'Chicoutimi', lat: 48.4174, lng: -71.0517, beds: 430, hasEmergency: true, hasICU: true, hasLab: true },
-  { nameFr: 'CHU de Québec', nameEn: 'Quebec University Hospital', regionCode: '03', type: 'University', city: 'Québec', lat: 46.8139, lng: -71.2080, beds: 569, hasEmergency: true, hasICU: true, hasLab: true },
-  { nameFr: 'CIUSSS MCQ', nameEn: 'CIUSSS MCQ', regionCode: '04', type: 'Regional', city: 'Trois-Rivières', lat: 46.3497, lng: -72.5478, beds: 350, hasEmergency: true, hasICU: true, hasLab: true },
-  { nameFr: 'CIUSSS de l\'Estrie', nameEn: 'CIUSSS Estrie', regionCode: '05', type: 'Regional', city: 'Sherbrooke', lat: 45.4042, lng: -71.8929, beds: 450, hasEmergency: true, hasICU: true, hasLab: true },
-  { nameFr: 'CHUM', nameEn: 'Montreal University Hospital', regionCode: '06', type: 'University', city: 'Montréal', lat: 45.5017, lng: -73.5673, beds: 772, hasEmergency: true, hasICU: true, hasLab: true },
-  { nameFr: 'Hôpital de Gatineau', nameEn: 'Gatineau Hospital', regionCode: '07', type: 'Regional', city: 'Gatineau', lat: 45.4765, lng: -75.7013, beds: 264, hasEmergency: true, hasICU: true, hasLab: true },
-  { nameFr: 'Hôpital de Rouyn-Noranda', nameEn: 'Rouyn-Noranda Hospital', regionCode: '08', type: 'Regional', city: 'Rouyn-Noranda', lat: 48.2506, lng: -78.8752, beds: 180, hasEmergency: true, hasICU: false, hasLab: true },
-  { nameFr: 'Hôpital de Baie-Comeau', nameEn: 'Baie-Comeau Hospital', regionCode: '09', type: 'Community', city: 'Baie-Comeau', lat: 49.2175, lng: -68.1483, beds: 120, hasEmergency: true, hasICU: false, hasLab: true },
-  { nameFr: 'Centre de santé Inuulitsivik', nameEn: 'Inuulitsivik Health Centre', regionCode: '10', type: 'Community', city: 'Puvirnituq', lat: 60.0389, lng: -77.2839, beds: 50, hasEmergency: true, hasICU: false, hasLab: true },
+  { nameFr: 'Hôpital d\'Alma', nameEn: 'Alma Hospital', regionCode: '02', type: 'Community', city: 'Alma', lat: 48.5500, lng: -71.6492, beds: 180, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 03 - Capitale-Nationale (Quebec City)
+  { nameFr: 'CHU de Québec - Hôpital de l\'Enfant-Jésus', nameEn: 'CHU Quebec - Enfant-Jésus Hospital', regionCode: '03', type: 'University', city: 'Québec', lat: 46.8358, lng: -71.2229, beds: 569, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital Laval', nameEn: 'Laval Hospital', regionCode: '03', type: 'Specialized', city: 'Québec', lat: 46.7844, lng: -71.2797, beds: 252, hasEmergency: false, hasICU: true, hasLab: true },
+  { nameFr: 'IUCPQ', nameEn: 'Quebec Heart and Lung Institute', regionCode: '03', type: 'Specialized', city: 'Québec', lat: 46.7871, lng: -71.2883, beds: 300, hasEmergency: true, hasICU: true, hasLab: true },
+
+  // Region 04 - Mauricie-et-Centre-du-Québec
+  { nameFr: 'CIUSSS MCQ', nameEn: 'Trois-Rivières Regional Hospital', regionCode: '04', type: 'Regional', city: 'Trois-Rivières', lat: 46.3625, lng: -72.5375, beds: 337, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital Sainte-Croix', nameEn: 'Sainte-Croix Hospital', regionCode: '04', type: 'Community', city: 'Drummondville', lat: 45.8804, lng: -72.4843, beds: 261, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 05 - Estrie
+  { nameFr: 'CHUS', nameEn: 'Sherbrooke University Hospital', regionCode: '05', type: 'University', city: 'Sherbrooke', lat: 45.3987, lng: -71.8956, beds: 682, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital de Granby', nameEn: 'Granby Hospital', regionCode: '05', type: 'Community', city: 'Granby', lat: 45.4003, lng: -72.7307, beds: 187, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 06 - Montréal
+  { nameFr: 'CHUM', nameEn: 'Montreal University Hospital Centre', regionCode: '06', type: 'University', city: 'Montréal', lat: 45.5075, lng: -73.5603, beds: 772, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital général juif', nameEn: 'Jewish General Hospital', regionCode: '06', type: 'University', city: 'Montréal', lat: 45.4961, lng: -73.6300, beds: 637, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital Maisonneuve-Rosemont', nameEn: 'Maisonneuve-Rosemont Hospital', regionCode: '06', type: 'University', city: 'Montréal', lat: 45.5987, lng: -73.5517, beds: 551, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital du Sacré-Coeur', nameEn: 'Sacré-Coeur Hospital', regionCode: '06', type: 'Regional', city: 'Montréal', lat: 45.5410, lng: -73.6716, beds: 546, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital général de Montréal', nameEn: 'Montreal General Hospital', regionCode: '06', type: 'University', city: 'Montréal', lat: 45.4964, lng: -73.5809, beds: 456, hasEmergency: true, hasICU: true, hasLab: true },
+
+  // Region 07 - Outaouais
+  { nameFr: 'Hôpital de Gatineau', nameEn: 'Gatineau Hospital', regionCode: '07', type: 'Regional', city: 'Gatineau', lat: 45.4767, lng: -75.6983, beds: 264, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital de Hull', nameEn: 'Hull Hospital', regionCode: '07', type: 'Regional', city: 'Gatineau', lat: 45.4276, lng: -75.7147, beds: 230, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 08 - Abitibi-Témiscamingue
+  { nameFr: 'Hôpital de Rouyn-Noranda', nameEn: 'Rouyn-Noranda Hospital', regionCode: '08', type: 'Regional', city: 'Rouyn-Noranda', lat: 48.2367, lng: -79.0122, beds: 142, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Centre hospitalier de Val-d\'Or', nameEn: 'Val-d\'Or Hospital', regionCode: '08', type: 'Community', city: 'Val-d\'Or', lat: 48.1002, lng: -77.7827, beds: 69, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 09 - Côte-Nord
+  { nameFr: 'Hôpital Le Royer', nameEn: 'Le Royer Hospital', regionCode: '09', type: 'Community', city: 'Baie-Comeau', lat: 49.2167, lng: -68.1486, beds: 90, hasEmergency: true, hasICU: false, hasLab: true },
+  { nameFr: 'Centre de santé de Sept-Îles', nameEn: 'Sept-Îles Health Centre', regionCode: '09', type: 'Regional', city: 'Sept-Îles', lat: 50.2143, lng: -66.3821, beds: 115, hasEmergency: true, hasICU: true, hasLab: true },
+
+  // Region 10 - Nord-du-Québec
+  { nameFr: 'Centre de santé Tulattavik', nameEn: 'Tulattavik Health Centre', regionCode: '10', type: 'Community', city: 'Kuujjuaq', lat: 58.1095, lng: -68.4149, beds: 18, hasEmergency: true, hasICU: false, hasLab: true },
+  { nameFr: 'Hôpital de Chibougamau', nameEn: 'Chibougamau Hospital', regionCode: '10', type: 'Community', city: 'Chibougamau', lat: 49.9204, lng: -74.3601, beds: 46, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 11 - Gaspésie–Îles-de-la-Madeleine
+  { nameFr: 'Hôpital de Gaspé', nameEn: 'Gaspé Hospital', regionCode: '11', type: 'Regional', city: 'Gaspé', lat: 48.8338, lng: -64.4807, beds: 68, hasEmergency: true, hasICU: false, hasLab: true },
+  { nameFr: 'Hôpital de Chandler', nameEn: 'Chandler Hospital', regionCode: '11', type: 'Community', city: 'Chandler', lat: 48.3467, lng: -64.6807, beds: 40, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 12 - Chaudière-Appalaches
+  { nameFr: 'Hôtel-Dieu de Lévis', nameEn: 'Lévis Hôtel-Dieu', regionCode: '12', type: 'Regional', city: 'Lévis', lat: 46.8031, lng: -71.1800, beds: 315, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital de Thetford Mines', nameEn: 'Thetford Mines Hospital', regionCode: '12', type: 'Community', city: 'Thetford Mines', lat: 46.0944, lng: -71.3024, beds: 85, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 13 - Laval
+  { nameFr: 'Cité-de-la-Santé de Laval', nameEn: 'Laval Health City', regionCode: '13', type: 'Regional', city: 'Laval', lat: 45.5966, lng: -73.7444, beds: 523, hasEmergency: true, hasICU: true, hasLab: true },
+
+  // Region 14 - Lanaudière
+  { nameFr: 'Centre hospitalier Pierre-Le Gardeur', nameEn: 'Pierre-Le Gardeur Hospital', regionCode: '14', type: 'Regional', city: 'Terrebonne', lat: 45.6986, lng: -73.6421, beds: 306, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Centre hospitalier de Joliette', nameEn: 'Joliette Hospital', regionCode: '14', type: 'Regional', city: 'Joliette', lat: 46.0278, lng: -73.4389, beds: 246, hasEmergency: true, hasICU: false, hasLab: true },
+
+  // Region 15 - Laurentides
+  { nameFr: 'Hôpital de Saint-Eustache', nameEn: 'Saint-Eustache Hospital', regionCode: '15', type: 'Regional', city: 'Saint-Eustache', lat: 45.5653, lng: -73.8990, beds: 269, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital de Saint-Jérôme', nameEn: 'Saint-Jérôme Hospital', regionCode: '15', type: 'Regional', city: 'Saint-Jérôme', lat: 45.7756, lng: -74.0066, beds: 396, hasEmergency: true, hasICU: true, hasLab: true },
+
+  // Region 16 - Montérégie
+  { nameFr: 'Hôpital Charles-Le Moyne', nameEn: 'Charles-Le Moyne Hospital', regionCode: '16', type: 'University', city: 'Longueuil', lat: 45.4985, lng: -73.4441, beds: 582, hasEmergency: true, hasICU: true, hasLab: true },
+  { nameFr: 'Hôpital du Haut-Richelieu', nameEn: 'Haut-Richelieu Hospital', regionCode: '16', type: 'Regional', city: 'Saint-Jean-sur-Richelieu', lat: 45.3167, lng: -73.2667, beds: 217, hasEmergency: true, hasICU: false, hasLab: true },
+  { nameFr: 'Hôpital Pierre-Boucher', nameEn: 'Pierre-Boucher Hospital', regionCode: '16', type: 'Regional', city: 'Longueuil', lat: 45.5374, lng: -73.4532, beds: 323, hasEmergency: true, hasICU: true, hasLab: true },
+
+  // Region 17 - Nunavik
+  { nameFr: 'Centre de santé Inuulitsivik', nameEn: 'Inuulitsivik Health Centre', regionCode: '17', type: 'Community', city: 'Puvirnituq', lat: 60.0359, lng: -77.2822, beds: 14, hasEmergency: true, hasICU: false, hasLab: true },
 ];
 
 async function setupDatabase() {
   try {
     console.log('🔧 Checking database...');
 
-    // Check if database is already set up
+    // Check if database is already set up with correct number of hospitals
     const checkResult = await pool.query(
       "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'hospitals')"
     );
 
     if (checkResult.rows[0].exists) {
-      console.log('✅ Database already set up, skipping...');
-      return;
+      const hospitalCount = await pool.query('SELECT COUNT(*) FROM hospitals');
+      const count = parseInt(hospitalCount.rows[0].count);
+
+      if (count === 37) {
+        console.log('✅ Database already set up with all 37 hospitals, skipping...');
+        return;
+      } else {
+        console.log(`⚠️  Database has ${count} hospitals, need 37. Recreating...`);
+      }
     }
 
-    console.log('🔧 Setting up database for the first time...');
+    console.log('🔧 Setting up database...');
 
     // Read and execute schema SQL
     const schemaPath = path.join(__dirname, 'schema.sql');
@@ -99,29 +166,41 @@ async function setupDatabase() {
     }
     console.log('✅ Hospitals inserted');
 
-    // Generate sample test results
+    // Generate sample test results - 5 data points per hospital/condition for rotating display
     const hospitalResults = await pool.query('SELECT id FROM hospitals');
     const conditionResults = await pool.query('SELECT id FROM conditions');
 
+    const today = new Date().toISOString().split('T')[0];
+
+    console.log(`📊 Generating test results for ${hospitalResults.rows.length} hospitals...`);
+
     for (const hospital of hospitalResults.rows) {
       for (const condition of conditionResults.rows) {
-        // Generate 30 days of test data
-        for (let i = 0; i < 30; i++) {
-          const date = new Date();
-          date.setDate(date.getDate() - i);
-          const totalTests = Math.floor(Math.random() * 100) + 20;
-          const positiveCount = Math.floor(Math.random() * totalTests * 0.3);
+        // Create 5 data points with varying severity (will simulate rotation)
+        const shouldHaveHighValues = Math.random() > 0.6; // 40% chance of outbreak
+
+        const dataPoints = [
+          { rate: Math.random() * 4 + 1 },      // Normal: 1-5%
+          { rate: Math.random() * 5 + 5 },      // Warning: 5-10%
+          { rate: Math.random() * 10 + 10 },    // Alert: 10-20%
+          { rate: shouldHaveHighValues ? Math.random() * 15 + 20 : Math.random() * 5 + 4 }, // Critical or warning
+          { rate: Math.random() * 3 + 2 },      // Normal: 2-5%
+        ];
+
+        for (const dataPoint of dataPoints) {
+          const totalTests = Math.floor(Math.random() * 800) + 200;
+          const positiveCount = Math.floor(totalTests * (dataPoint.rate / 100));
           const negativeCount = totalTests - positiveCount;
           const positivityRate = ((positiveCount / totalTests) * 100).toFixed(2);
 
           await pool.query(
             'INSERT INTO test_results (hospital_id, condition_id, test_date, positive_count, negative_count, total_tests, positivity_rate) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-            [hospital.id, condition.id, date.toISOString().split('T')[0], positiveCount, negativeCount, totalTests, positivityRate]
+            [hospital.id, condition.id, today, positiveCount, negativeCount, totalTests, parseFloat(positivityRate)]
           );
         }
       }
     }
-    console.log('✅ Test results inserted');
+    console.log(`✅ Test results inserted (${hospitalResults.rows.length * conditionResults.rows.length * 5} data points)`);
 
     // Create admin user
     const hashedPassword = await bcrypt.hash('admin123', 10);
