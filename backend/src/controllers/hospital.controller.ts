@@ -116,7 +116,7 @@ export const getHospitalById = async (req: Request, res: Response) => {
         h.has_lab
       FROM hospitals h
       INNER JOIN regions r ON h.region_id = r.id
-      WHERE h.id = ? AND h.is_active = 1
+      WHERE h.id = $1
     `;
 
     const result = await pool.query(query, [id]);
@@ -143,9 +143,9 @@ export const getHospitalById = async (req: Request, res: Response) => {
       latitude: parseFloat(row.latitude),
       longitude: parseFloat(row.longitude),
       bedCount: row.bed_count,
-      hasEmergency: row.has_emergency === 1,
-      hasICU: row.has_icu === 1,
-      hasLab: row.has_lab === 1,
+      hasEmergency: row.has_emergency,
+      hasICU: row.has_icu,
+      hasLab: row.has_lab,
     };
 
     res.json({
@@ -174,7 +174,7 @@ export const getHospitalTestResults = async (req: Request, res: Response) => {
     const hospitalQuery = `
       SELECT h.id, h.name_${lang} as name, h.region_id
       FROM hospitals h
-      WHERE h.id = ? AND h.is_active = 1
+      WHERE h.id = $1
     `;
     const hospitalResult = await pool.query(hospitalQuery, [id]);
 
@@ -188,8 +188,7 @@ export const getHospitalTestResults = async (req: Request, res: Response) => {
     const hospital = hospitalResult.rows[0];
     const regionId = hospital.region_id;
 
-    // Get latest test results for this region's conditions
-    // Use a rotating index based on current time to simulate refresh
+    // Get latest test results for this hospital
     const testResultsQuery = `
       SELECT
         c.id as condition_id,
@@ -198,18 +197,17 @@ export const getHospitalTestResults = async (req: Request, res: Response) => {
         c.category,
         tr.test_date,
         tr.total_tests,
-        tr.positive_tests,
-        tr.positive_rate,
-        tr.population_tested,
-        tr.data_index
+        tr.positive_count as positive_tests,
+        tr.positivity_rate as positive_rate
       FROM test_results tr
       INNER JOIN conditions c ON tr.condition_id = c.id
-      WHERE tr.region_id = ?
-        AND c.is_active = 1
-      ORDER BY tr.positive_rate DESC
+      WHERE tr.hospital_id = $1
+        AND c.is_active = true
+        AND tr.test_date >= CURRENT_DATE - INTERVAL '30 days'
+      ORDER BY tr.positivity_rate DESC
     `;
 
-    const resultsData = await pool.query(testResultsQuery, [regionId]);
+    const resultsData = await pool.query(testResultsQuery, [id]);
 
     // Group by condition and pick one based on current time (to simulate rotation)
     const conditionMap = new Map();

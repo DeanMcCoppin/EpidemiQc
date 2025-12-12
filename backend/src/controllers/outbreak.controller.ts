@@ -21,25 +21,23 @@ export const getCurrentOutbreaks = async (req: Request, res: Response) => {
         c.name_${lang} as condition_name,
         c.category,
         tr.test_date,
-        tr.total_tests,
-        tr.positive_tests,
-        tr.positive_rate,
-        tr.population_tested,
+        SUM(tr.total_tests) as total_tests,
+        SUM(tr.positive_count) as positive_tests,
+        AVG(tr.positivity_rate) as positive_rate,
         t.threshold_type,
         t.threshold_value,
         t.color_code
       FROM test_results tr
-      INNER JOIN regions r ON tr.region_id = r.id
+      INNER JOIN hospitals h ON tr.hospital_id = h.id
+      INNER JOIN regions r ON h.region_id = r.id
       INNER JOIN conditions c ON tr.condition_id = c.id
       LEFT JOIN thresholds t ON tr.condition_id = t.condition_id
         AND t.region_id IS NULL
-        AND tr.positive_rate >= t.threshold_value
-      WHERE tr.test_date = (
-        SELECT MAX(test_date)
-        FROM test_results
-        WHERE region_id = tr.region_id AND condition_id = tr.condition_id
-      )
-      AND c.is_active = 1
+      WHERE tr.test_date >= CURRENT_DATE - INTERVAL '7 days'
+      AND c.is_active = true
+      GROUP BY r.id, r.code, r.name_${lang}, r.center_lat, r.center_lng, r.population,
+               c.id, c.code, c.name_${lang}, c.category, tr.test_date,
+               t.threshold_type, t.threshold_value, t.color_code
     `;
 
     const params: any[] = [];
@@ -156,20 +154,18 @@ export const getMapData = async (req: Request, res: Response) => {
     // Get latest test results for each region/condition
     const outbreaksQuery = `
       SELECT
-        tr.region_id,
+        h.region_id,
         c.name_${lang} as condition_name,
         c.code as condition_code,
-        tr.positive_rate,
-        tr.test_date
+        AVG(tr.positivity_rate) as positive_rate,
+        MAX(tr.test_date) as test_date
       FROM test_results tr
+      INNER JOIN hospitals h ON tr.hospital_id = h.id
       INNER JOIN conditions c ON tr.condition_id = c.id
-      WHERE c.is_active = 1
-        AND tr.test_date = (
-          SELECT MAX(test_date)
-          FROM test_results
-          WHERE region_id = tr.region_id AND condition_id = tr.condition_id
-        )
-      ORDER BY tr.region_id, tr.positive_rate DESC
+      WHERE c.is_active = true
+        AND tr.test_date >= CURRENT_DATE - INTERVAL '7 days'
+      GROUP BY h.region_id, c.name_${lang}, c.code
+      ORDER BY h.region_id, AVG(tr.positivity_rate) DESC
     `;
 
     const outbreaksResult = await pool.query(outbreaksQuery);
