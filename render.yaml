@@ -10,7 +10,6 @@ services:
   - type: web
     name: epidemiqc-api
     runtime: node
-    plan: free
     region: ohio
     rootDir: backend
     buildCommand: npm install && npm run build
@@ -36,7 +35,6 @@ services:
   - type: web
     name: epidemiqc-frontend
     runtime: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
