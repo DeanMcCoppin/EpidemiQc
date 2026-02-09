@@ -6,10 +6,11 @@ import { AuthRequest } from '../types';
 
 // Generate JWT token
 const generateToken = (id: number, email: string, role: string): string => {
+  const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
   return jwt.sign(
     { id, email, role },
     process.env.JWT_SECRET || 'secret',
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    { expiresIn: expiresIn as string }
   );
 };
 

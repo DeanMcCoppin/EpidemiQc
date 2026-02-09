@@ -39,7 +39,7 @@ export const getHospitals = async (req: Request, res: Response) => {
     }
 
     if (hasLab !== undefined) {
-      const hasLabValue = hasLab === 'true' || hasLab === '1' || hasLab === true;
+      const hasLabValue = hasLab === 'true' || hasLab === '1';
       params.push(hasLabValue);
       query += ` AND h.has_lab = $${paramIndex++}`;
       console.log('🏥 Filtering by hasLab:', hasLabValue);
