@@ -2,15 +2,12 @@ databases:
   - name: epidemiqc-db
     databaseName: epidemiqc
     user: epidemiqc
-    plan: free
-    region: ohio
 
 services:
   # Backend API
   - type: web
     name: epidemiqc-api
     runtime: node
-    region: ohio
     rootDir: backend
     buildCommand: npm install && npm run build
     startCommand: npm start
