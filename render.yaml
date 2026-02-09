@@ -27,11 +27,12 @@ services:
       - key: FRONTEND_URL
         sync: false
 
-  - type: static
+  - type: web
+    runtime: static
     name: epidemiqc-frontend
+    rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
-    rootDir: frontend
     envVars:
       - key: VITE_API_BASE_URL
         sync: false
